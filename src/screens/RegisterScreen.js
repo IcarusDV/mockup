@@ -1,8 +1,5 @@
-// src/screens/RegisterScreen.js
-
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
-import { style } from '../pages/login/style'; 
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image, Animated } from 'react-native';
 import { themas } from '../global/themes';
 
 const RegisterScreen = () => {
@@ -17,39 +14,39 @@ const RegisterScreen = () => {
     };
 
     return (
-        <View style={style.container}>
-            <Text style={style.titleInput}>Nome Completo</Text>
+        <View style={styles.container}>
+            <Text style={styles.title}>Crie sua Conta</Text>
+            
             <TextInput
-                style={[style.input, { backgroundColor: themas.colors.inputBackground }]}
-                placeholder="Digite seu nome completo"
-                placeholderTextColor="grey"
+                style={styles.input}
+                placeholder="Nome Completo"
+                placeholderTextColor={themas.colors.placeholder}
                 value={fullName}
                 onChangeText={setFullName}
             />
 
-            <Text style={style.titleInput}>E-mail</Text>
             <TextInput
-                style={[style.input, { backgroundColor: themas.colors.inputBackground }]}
-                placeholder="Digite seu e-mail"
-                placeholderTextColor="grey"
+                style={styles.input}
+                placeholder="E-mail"
+                placeholderTextColor={themas.colors.placeholder}
+                keyboardType="email-address"
                 value={email}
                 onChangeText={setEmail}
             />
 
-            <Text style={style.titleInput}>Código de Verificação</Text>
             <TextInput
-                style={[style.input, { backgroundColor: themas.colors.inputBackground }]}
-                placeholder="Digite o código que você recebeu"
-                placeholderTextColor="grey"
+                style={styles.input}
+                placeholder="Código de Verificação"
+                placeholderTextColor={themas.colors.placeholder}
+                keyboardType="numeric"
                 value={verificationCode}
                 onChangeText={setVerificationCode}
             />
 
-            <Text style={style.titleInput}>Senha</Text>
             <TextInput
-                style={[style.input, { backgroundColor: themas.colors.inputBackground }]}
-                placeholder="Digite sua senha"
-                placeholderTextColor="grey"
+                style={styles.input}
+                placeholder="Senha"
+                placeholderTextColor={themas.colors.placeholder}
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
@@ -60,16 +57,17 @@ const RegisterScreen = () => {
                     <View style={[styles.checkbox, agreeTerms && styles.checkedCheckbox]} />
                 </TouchableOpacity>
                 <Text style={styles.termsText}>
-                    Eu concordo com{' '}
-                    <Text style={styles.linkText}>termos</Text> e <Text style={styles.linkText}>privacidade</Text>
+                    Eu concordo com os{' '}
+                    <Text style={styles.linkText}>termos de serviço</Text> e <Text style={styles.linkText}>política de privacidade</Text>
                 </Text>
             </View>
 
-            <TouchableOpacity style={style.button} onPress={handleRegister}>
-                <Text style={style.textButton}>Criar Conta</Text>
+            <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                <Text style={styles.buttonText}>Criar Conta</Text>
             </TouchableOpacity>
 
-            {/* Ícones das redes sociais */}
+            <Text style={styles.orText}>Ou conecte-se com</Text>
+            
             <View style={styles.socialIconsContainer}>
                 <TouchableOpacity>
                     <Image source={require('../assets/facebook.png')} style={styles.icon} />
@@ -86,37 +84,77 @@ const RegisterScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: themas.colors.background,
+        paddingHorizontal: 20,
+        justifyContent: 'center',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: themas.colors.primary,
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    input: {
+        backgroundColor: themas.colors.inputBackground,
+        padding: 12,
+        borderRadius: 10,
+        fontSize: 16,
+        color: themas.colors.text,
+        marginBottom: 15,
+    },
     termsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 15,
+        marginVertical: 10,
     },
     checkbox: {
         height: 20,
         width: 20,
         borderWidth: 1,
         borderColor: themas.colors.primary,
-        borderRadius: 3,
+        borderRadius: 5,
         marginRight: 10,
     },
     checkedCheckbox: {
         backgroundColor: themas.colors.primary,
     },
     termsText: {
-        color: 'black',
+        color: themas.colors.text,
+        fontSize: 14,
     },
     linkText: {
         color: themas.colors.primary,
         textDecorationLine: 'underline',
     },
+    button: {
+        backgroundColor: themas.colors.primary,
+        paddingVertical: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    buttonText: {
+        color: themas.colors.buttonText,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    orText: {
+        color: themas.colors.text,
+        textAlign: 'center',
+        marginVertical: 15,
+        fontSize: 14,
+    },
     socialIconsContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: 20,
+        justifyContent: 'space-between',
+        marginTop: 10,
     },
     icon: {
-        width: 40,
-        height: 40,
+        width: 45,
+        height: 45,
         resizeMode: 'contain',
     },
 });
