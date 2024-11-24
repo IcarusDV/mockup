@@ -12,6 +12,7 @@ import { themas } from "../../global/themes";
 import Logo from "../../assets/logo.png";
 import { useNavigation } from "@react-navigation/native";
 import { style } from "./style";
+import ToastManager from "toastify-react-native";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");

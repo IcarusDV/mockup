@@ -12,17 +12,35 @@ import { style } from "./style";
 import Logo from "../../assets/logo.png";
 import Checkbox from "expo-checkbox";
 import { useNavigation } from "@react-navigation/native";
+import useEndpointAction from "../../hooks/useEndpointAction";
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
 
-  const handleRegister = () => {
-    Alert.alert("Conta criada com sucesso!");
+  const registerAction = useEndpointAction("POST", "/api/auth/register");
+
+  const handleRegister = async () => {
+    try {
+      const request = await registerAction({
+        username: name,
+        email,
+        password,
+      });
+
+      Alert.alert(request?.data?.message);
+
+      if (request.status === 201) {
+        navigation.navigate("Login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -33,6 +51,15 @@ const RegisterScreen = () => {
       </View>
 
       <View style={style.inputContainer}>
+        <Text style={style.label}>Nome de Usuário</Text>
+        <TextInput
+          style={style.input}
+          placeholder="Escreva seu nome"
+          placeholderTextColor={themas.colors.low_opacity_white}
+          value={name}
+          onChangeText={setName}
+        />
+
         <Text style={style.label}>E-mail</Text>
         <TextInput
           style={style.input}
