@@ -12,7 +12,7 @@ import { themas } from "../../global/themes";
 import Logo from "../../assets/logo.png";
 import { useNavigation } from "@react-navigation/native";
 import { style } from "./style";
-import ToastManager from "toastify-react-native";
+import useEndpointAction from "../../hooks/useEndpointAction";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -20,13 +20,32 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      Alert.alert("Erro", "Informe todos os campos obrigatórios");
-      return;
+  const loginAction = useEndpointAction("POST", "/api/auth/login");
+
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+
+      if (!email || !password) {
+        Alert.alert("Erro", "Informe todos os campos obrigatórios");
+        return;
+      }
+
+      const response = await loginAction({ identifier: email, password });
+
+      Alert.alert(response?.data?.message);
+
+      if (response.status === 200) {
+        const token = response.data.token;
+
+        navigation.navigate("Feed");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
 
-    setLoading(true);
     setTimeout(() => {
       if (email === "emilybiecoski@hotmail.com" && password === "123456") {
         Alert.alert("Sucesso", "Login realizado com sucesso");

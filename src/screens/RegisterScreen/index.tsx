@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { themas } from "../../global/themes";
 import { style } from "./style";
@@ -22,11 +23,14 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const registerAction = useEndpointAction("POST", "/api/auth/register");
 
   const handleRegister = async () => {
     try {
+      setLoading(true);
+
       const request = await registerAction({
         username: name,
         email,
@@ -40,6 +44,8 @@ const RegisterScreen = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,7 +112,11 @@ const RegisterScreen = () => {
       </View>
 
       <TouchableOpacity style={style.button} onPress={handleRegister}>
-        <Text style={style.buttonText}>Criar Conta</Text>
+        {loading ? (
+          <ActivityIndicator size="small" color={themas.colors.lightgray} />
+        ) : (
+          <Text style={style.buttonText}>Criar Conta</Text>
+        )}
       </TouchableOpacity>
 
       <Text style={style.footerText}>
