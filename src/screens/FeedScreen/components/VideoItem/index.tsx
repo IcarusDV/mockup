@@ -45,6 +45,7 @@ export const VideoItem = ({
           source={{ uri: item.url }}
           style={style.video}
           isLooping
+          volume={0}
           resizeMode={ResizeMode.COVER}
           useNativeControls={false}
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
