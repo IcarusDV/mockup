@@ -12,10 +12,6 @@ import useEndpointAction from "../../hooks/useEndpointAction";
 import useAuth from "../../hooks/useAuth";
 
 export default function ProfileScreen() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-
   const [user, setUser] = useState(null);
   const { logout } = useAuth();
 
@@ -85,7 +81,6 @@ export default function ProfileScreen() {
               placeholder="Digite seu nome"
               placeholderTextColor={themas.colors.low_opacity_white}
               value={user?.username || ""}
-              onChangeText={setName}
               editable={false}
             />
 
@@ -95,7 +90,6 @@ export default function ProfileScreen() {
               placeholder="Digite seu E-Mail"
               placeholderTextColor={themas.colors.low_opacity_white}
               value={user?.email || ""}
-              onChangeText={setEmail}
               editable={false}
             />
 
@@ -105,7 +99,6 @@ export default function ProfileScreen() {
               placeholder="Digite seu Número"
               placeholderTextColor={themas.colors.low_opacity_white}
               value={user?.phone || ""}
-              onChangeText={setPhoneNumber}
               editable={false}
             />
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { style } from "./style";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -6,14 +6,36 @@ import Feather from "@expo/vector-icons/Feather";
 import ProfilePhoto from "../../assets/profile.png";
 import { themas } from "../../global/themes";
 import { useNavigation } from "@react-navigation/native";
+import useEndpointAction from "../../hooks/useEndpointAction";
 
 export default function ProfileEdit() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigation();
+  const getUserAction = useEndpointAction("GET", "/api/users/user");
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const response = await getUserAction();
+
+        if (response.status === 200) {
+          setName(response.data.username);
+          setEmail(response.data.email);
+          setPhoneNumber(response.data.phone);
+          setUser(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getUser();
+  }, []);
 
   return (
     <View style={style.container}>
@@ -33,7 +55,10 @@ export default function ProfileEdit() {
         <Text style={style.title}>Editar Perfil</Text>
         <View style={style.imageContainer}>
           <View style={{ position: "relative" }}>
-            <Image style={style.profilePhoto} source={ProfilePhoto} />
+            <Image
+              style={style.profilePhoto}
+              source={user?.profilePicture || ProfilePhoto}
+            />
             <TouchableOpacity style={style.profilePhotoEditButton}>
               <Feather name="edit-2" size={18} color="white" />
             </TouchableOpacity>
