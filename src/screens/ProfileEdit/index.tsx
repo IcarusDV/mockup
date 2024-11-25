@@ -7,6 +7,7 @@ import ProfilePhoto from "../../assets/profile.png";
 import { themas } from "../../global/themes";
 import { useNavigation } from "@react-navigation/native";
 import useEndpointAction from "../../hooks/useEndpointAction";
+import * as DocumentPicker from "expo-document-picker";
 
 export default function ProfileEdit() {
   const [name, setName] = useState("");
@@ -15,8 +16,31 @@ export default function ProfileEdit() {
   const [newPassword, setNewPassword] = useState("");
   const [user, setUser] = useState(null);
 
+  const [newImage, setNewImage] = useState("");
+
   const navigate = useNavigation();
   const getUserAction = useEndpointAction("GET", "/api/users/user");
+
+  async function pickImage() {
+    try {
+      const docRes = await DocumentPicker.getDocumentAsync({
+        type: "image/*",
+      });
+
+      const [file] = docRes.assets;
+      setNewImage(file);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function editUser() {
+    try {
+      navigate.navigate("Profile");
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     async function getUser() {
@@ -57,9 +81,16 @@ export default function ProfileEdit() {
           <View style={{ position: "relative" }}>
             <Image
               style={style.profilePhoto}
-              source={user?.profilePicture || ProfilePhoto}
+              source={
+                newImage
+                  ? { uri: newImage.uri }
+                  : user?.profilePicture || ProfilePhoto
+              }
             />
-            <TouchableOpacity style={style.profilePhotoEditButton}>
+            <TouchableOpacity
+              onPress={pickImage}
+              style={style.profilePhotoEditButton}
+            >
               <Feather name="edit-2" size={18} color="white" />
             </TouchableOpacity>
           </View>
@@ -103,7 +134,7 @@ export default function ProfileEdit() {
             onChangeText={setNewPassword}
           />
 
-          <TouchableOpacity style={style.saveButton}>
+          <TouchableOpacity onPress={editUser} style={style.saveButton}>
             <Text style={style.saveButtonText}>Salvar Alterações</Text>
           </TouchableOpacity>
         </View>

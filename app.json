@@ -34,6 +34,12 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Permitir $(PRODUCT_NAME) utilizar sua localização."
         }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
       ]
     ],
     "extra": {
