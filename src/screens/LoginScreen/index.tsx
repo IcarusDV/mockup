@@ -13,6 +13,7 @@ import Logo from "../../assets/logo.png";
 import { useNavigation } from "@react-navigation/native";
 import { style } from "./style";
 import useEndpointAction from "../../hooks/useEndpointAction";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import useAuth from "../../hooks/useAuth";
 
 const LoginScreen = () => {
@@ -103,6 +104,20 @@ const LoginScreen = () => {
           Criar conta
         </Text>
       </Text>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Origin")}
+        style={{
+          backgroundColor: themas.colors.primary,
+          position: "absolute",
+          bottom: 32,
+          right: 32,
+          padding: 8,
+          borderRadius: 128,
+        }}
+      >
+        <FontAwesome name="gear" size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };

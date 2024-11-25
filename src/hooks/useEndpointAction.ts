@@ -1,13 +1,12 @@
 import useAuth from "./useAuth";
-
-const origin = "http://192.168.18.14:3000";
-
+import useServer from "./useServer";
 interface ReturnObject extends Response {
     data: any
 }
 
 export default function useEndpointAction(method: RequestInit['method'], endpoint: string) {
 
+    const { origin } = useServer();
     const { userToken } = useAuth();
     
     async function makeRequest(data?: RequestInit['body']): Promise<ReturnObject>{

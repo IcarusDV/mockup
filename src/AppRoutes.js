@@ -11,6 +11,7 @@ import ProfileEdit from './screens/ProfileEdit';
 import DeleteAccount from './screens/DeleteAccount';
 import FeedScreen from './screens/FeedScreen';
 import useAuth from './hooks/useAuth';
+import EditOrigin from './screens/EditOrigin';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ const AppRoutes = () => {
             <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Login">
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Register" component={RegisterScreen} />                
+                <Stack.Screen name="Origin" component={EditOrigin} />                
                 {userToken ? (
                     <>
                         <Stack.Screen name="Explore" component={Explore} />                
