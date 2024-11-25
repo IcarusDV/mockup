@@ -13,6 +13,7 @@ import Logo from "../../assets/logo.png";
 import { useNavigation } from "@react-navigation/native";
 import { style } from "./style";
 import useEndpointAction from "../../hooks/useEndpointAction";
+import useAuth from "../../hooks/useAuth";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +21,7 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
+  const { login } = useAuth();
   const loginAction = useEndpointAction("POST", "/api/auth/login");
 
   const handleLogin = async () => {
@@ -37,6 +39,7 @@ const LoginScreen = () => {
 
       if (response.status === 200) {
         const token = response.data.token;
+        login(token);
 
         navigation.navigate("Feed");
       }
@@ -45,16 +48,6 @@ const LoginScreen = () => {
     } finally {
       setLoading(false);
     }
-
-    setTimeout(() => {
-      if (email === "emilybiecoski@hotmail.com" && password === "123456") {
-        Alert.alert("Sucesso", "Login realizado com sucesso");
-        // Navegar para a próxima tela ou realizar outra ação
-      } else {
-        Alert.alert("Erro", "Usuário ou senha incorretos");
-      }
-      setLoading(false);
-    }, 2000);
   };
 
   return (

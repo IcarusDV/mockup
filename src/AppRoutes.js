@@ -10,23 +10,31 @@ import ProfileScreen from './screens/ProfileScreen';
 import ProfileEdit from './screens/ProfileEdit';
 import DeleteAccount from './screens/DeleteAccount';
 import FeedScreen from './screens/FeedScreen';
+import useAuth from './hooks/useAuth';
 
 const Stack = createStackNavigator();
 
 // Retornar rota Login como padrão após desenvolvimento
 const AppRoutes = () => {
+    
+    const {userToken} = useAuth()
+    
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Login">
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Register" component={RegisterScreen} />                
-                <Stack.Screen name="Explore" component={Explore} />                
-                <Stack.Screen name="Progress" component={ProgressScreen} />                
-                <Stack.Screen name="Map" component={MapScreen} />                
-                <Stack.Screen name="Profile" component={ProfileScreen} />                
-                <Stack.Screen name="ProfileEdit" component={ProfileEdit} />                
-                <Stack.Screen name="DeleteAccount" component={DeleteAccount} />                
-                <Stack.Screen name="Feed" component={FeedScreen} />                
+                {userToken ? (
+                    <>
+                        <Stack.Screen name="Explore" component={Explore} />                
+                        <Stack.Screen name="Progress" component={ProgressScreen} />                
+                        <Stack.Screen name="Map" component={MapScreen} />                
+                        <Stack.Screen name="Profile" component={ProfileScreen} />                
+                        <Stack.Screen name="ProfileEdit" component={ProfileEdit} />                
+                        <Stack.Screen name="DeleteAccount" component={DeleteAccount} />                
+                        <Stack.Screen name="Feed" component={FeedScreen} />   
+                    </>
+                ) : null}             
             </Stack.Navigator>
         </NavigationContainer>
     );
