@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { themas } from "../../global/themes";
 import { style } from "./style";
@@ -8,13 +8,40 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ProfilePhoto from "../../assets/profile.png";
 import { useNavigation } from "@react-navigation/native";
 import TabBar from "../../components/TabBar";
+import useEndpointAction from "../../hooks/useEndpointAction";
+import useAuth from "../../hooks/useAuth";
 
 export default function ProfileScreen() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  const [user, setUser] = useState(null);
+  const { logout } = useAuth();
+
+  const getUserAction = useEndpointAction("GET", "/api/users/user");
   const navigate = useNavigation();
+
+  function handleLogout() {
+    logout();
+    navigate.navigate("Login");
+  }
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const response = await getUserAction();
+
+        if (response.status === 200) {
+          setUser(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getUser();
+  }, []);
 
   return (
     <>
@@ -45,7 +72,10 @@ export default function ProfileScreen() {
 
         <View style={style.bottonContainer}>
           <View style={style.imageContainer}>
-            <Image style={style.profilePhoto} source={ProfilePhoto} />
+            <Image
+              style={style.profilePhoto}
+              source={user?.profilePicture || ProfilePhoto}
+            />
           </View>
 
           <View style={style.inputContainer}>
@@ -54,8 +84,9 @@ export default function ProfileScreen() {
               style={style.input}
               placeholder="Digite seu nome"
               placeholderTextColor={themas.colors.low_opacity_white}
-              value={name}
+              value={user?.username || ""}
               onChangeText={setName}
+              editable={false}
             />
 
             <Text style={style.label}>E-Mail</Text>
@@ -63,8 +94,9 @@ export default function ProfileScreen() {
               style={style.input}
               placeholder="Digite seu E-Mail"
               placeholderTextColor={themas.colors.low_opacity_white}
-              value={email}
+              value={user?.email || ""}
               onChangeText={setEmail}
+              editable={false}
             />
 
             <Text style={style.label}>Número de Contato</Text>
@@ -72,8 +104,9 @@ export default function ProfileScreen() {
               style={style.input}
               placeholder="Digite seu Número"
               placeholderTextColor={themas.colors.low_opacity_white}
-              value={phoneNumber}
+              value={user?.phone || ""}
               onChangeText={setPhoneNumber}
+              editable={false}
             />
 
             <View
@@ -91,7 +124,7 @@ export default function ProfileScreen() {
                 <Text style={style.deleteButtonText}>Deletar Conta</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={style.exitButton}>
+              <TouchableOpacity onPress={handleLogout} style={style.exitButton}>
                 <Text style={style.exitButtonText}>Sair</Text>
                 <MaterialCommunityIcons
                   name="exit-to-app"

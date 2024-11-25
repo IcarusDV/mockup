@@ -1,3 +1,5 @@
+import useAuth from "./useAuth";
+
 const origin = "http://192.168.18.14:3000";
 
 interface ReturnObject extends Response {
@@ -5,12 +7,18 @@ interface ReturnObject extends Response {
 }
 
 export default function useEndpointAction(method: RequestInit['method'], endpoint: string) {
+
+    const { userToken } = useAuth();
     
     async function makeRequest(data?: RequestInit['body']): Promise<ReturnObject>{
         
         const configData: RequestInit = {method, headers: {
-            "content-type": 'application/json'
+            "content-type": 'application/json',
         }};
+
+        if(userToken){
+            configData.headers['authorization'] = userToken
+        }
 
         if(data){
             configData.body = JSON.stringify(data);

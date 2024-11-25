@@ -41,6 +41,8 @@ const LoginScreen = () => {
         const token = response.data.token;
         login(token);
 
+        setEmail("");
+        setPassword("");
         navigation.navigate("Feed");
       }
     } catch (error) {
